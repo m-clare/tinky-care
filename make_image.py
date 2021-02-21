@@ -6,12 +6,12 @@ from inky.inky_uc8159 import Inky
 inky = Inky()
 
 img = Image.open('./assets/nova.jpg')
-
 w, h = img.size
+print(w, h)
 
 img = img.resize((448, 600))
 
-img.rotate(90)
+img = img.transpose(Image.ROTATE_90)
 # x0 = (w_new - w_cropped) / 2
 # x1 = x0 + w_cropped
 # y0 = 0
@@ -41,7 +41,9 @@ SATURATED_PALETTE = (57, 48, 57,
                      177, 106, 73,
                      255, 255, 255) + (0, 0, 0) * 248
 
-pal_img.putpalette(DESATURATED_PALETTE)
+MID_PALETTE = tuple(sum(x)// 2 for x in zip(DESATURATED_PALETTE, SATURATED_PALETTE))
+
+pal_img.putpalette(MID_PALETTE)
 
 img = img.convert("RGB").quantize(palette=pal_img)
 inky.set_image(img)
