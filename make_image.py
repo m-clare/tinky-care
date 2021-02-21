@@ -5,7 +5,7 @@ from inky.inky_uc8159 import Inky
 
 inky = Inky()
 
-img = Image.open('./assets/origami_photo.jpg')
+img = Image.open('./assets/nova.jpg')
 
 w, h = img.size
 
@@ -21,17 +21,29 @@ img.show()
 # img.show()
 
 pal_img = Image.new("P", (1, 1))
-pal_img.putpalette((0, 0, 0,
-                   255, 255, 255,
-                   0, 255, 0,
-                   0, 0, 255,
-                   255, 0, 0,
-                   255, 255, 0,
-                   255, 140, 0,
-                   255, 255, 255) + (0, 0, 0) * 248)
+
+DESATURATED_PALETTE = (0, 0, 0,
+                       255, 255, 255,
+                       0, 255, 0,
+                       0, 0, 255,
+                       255, 0, 0,
+                       255, 255, 0,
+                       255, 140, 0,
+                       255, 255, 255) + (0, 0, 0) * 248
+
+SATURATED_PALETTE = (57, 48, 57,
+                     255, 255, 255,
+                     58, 91, 70,
+                     61, 59, 94,
+                     156, 72, 75,
+                     208, 190, 71,
+                     177, 106, 73,
+                     255, 255, 255) + (0, 0, 0) * 248
+
+pal_img.putpalette(DESATURATED_PALETTE)
 
 img = img.convert("RGB").quantize(palette=pal_img)
 inky.set_image(img)
-inky_display.show()
-# img.show()
+inky.show()
+
 
