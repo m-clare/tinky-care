@@ -9,8 +9,9 @@ img = Image.open('./assets/nova.jpg')
 
 w, h = img.size
 
-img = img.resize((600, 448))
-img.show()
+img = img.resize((448, 600))
+
+img.rotate(90)
 # x0 = (w_new - w_cropped) / 2
 # x1 = x0 + w_cropped
 # y0 = 0
