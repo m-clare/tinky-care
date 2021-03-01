@@ -1,0 +1,4 @@
+python-twitter
+plotly
+re
+font-caladea

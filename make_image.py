@@ -11,7 +11,6 @@ print(w, h)
 
 img = img.resize((448, 600))
 
-img = img.transpose(Image.ROTATE_90)
 # x0 = (w_new - w_cropped) / 2
 # x1 = x0 + w_cropped
 # y0 = 0
