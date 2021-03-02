@@ -2,6 +2,8 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 from inky.inky_uc8159 import Inky
 from datetime import datetime as dt
+from bots.orgbot import get_org_image
+from bots.twitterbot import get_tweet_image
 
 # Inky display information
 inky_display = Inky()
@@ -37,28 +39,65 @@ def set_blank_background(width, height):
     return canvas
 
 
-def assemble_canvas(inky):
+def assemble_canvas(inky, pom):
     canvas = Image.new("RGB", (inky.WIDTH, inky.HEIGHT), (255, 255, 255))
     org = Image.open('./assets/org.png')
     canvas.paste(org, (0, 0))
     tweet = Image.open('./assets/tweet.png')
     canvas.paste(tweet, (org.width, 0))
+
     return canvas
 
 
-def update_canvas_component(bot=None):
-    if bot == org:
-        pass
-    if bot == tweet:
-        pass
+def check_display(inky, tomato, cycle, start_time):
+    num_tomato, text = get_pomodoro_time(start_time)
+    if num_tomato == tomato and text == cycle:
+        return
+    else:
+        get_tweet_image(450, 338)
+        if text == "still working":
+            pom = get_tomato_image(inky, num_tomato)
+        else:
+            pom = get_text_image(inky, text)
+        out_dict = {'num_tomato': num_tomato,
+                    'status_cycle': text,
+                    'start_time': start_time}
+        with open(PATH + '../assets/update/status.json', 'w') as fh:
+            json.dump(out_dict, fh)
+        img = assemble_canvas(inky_display)
+        # Inky color display conversion
+        pal_img = Image.new("P", (1, 1))
+        pal_img.putpalette(SATURATED_PALETTE)
+        img = img.convert("RGB").quantize(palette=pal_img)
+        img.show()
+        inky_display.rotation = 180
+        inky_display.set_image(img)
+        inky_display.show()
 
 
-img = assemble_canvas(inky_display)
-# Inky color display conversion
-pal_img = Image.new("P", (1, 1))
-pal_img.putpalette(MID_PALETTE)
-img = img.convert("RGB").quantize(palette=pal_img)
-img.show()
-inky_display.rotation = 180
-inky_display.set_image(img)
-inky_display.show()
+# default start values for pomodoro
+tomato = 0
+cycle = 'still working'
+start_time = int(datetime.utcnow().timestamp()) % 86400
+
+if os.path.exists(PATH + '../assets/update/status.json'):
+    with open(PATH + '../assets/update/status.json', 'r') as fh:
+        status = json.load(fh)
+        tomato = status["num_tomato"]
+        cycle = status["status_cycle"]
+        start_time = status['start_time']
+else:
+    status = {'num_tomato': tomato,
+              'status_cycle': cycle,
+              'start_time': start_time}
+    # reset display
+    img = get_tomato_image(inky_display, 0)
+    inky_display.set_image(img)
+    inky_display.show()
+    with open(PATH + '/status.json', 'w') as fh:
+        json.dump(status, fh)
+
+check_display(inky_display, tomato, cycle, start_time)
+
+
+
