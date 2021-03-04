@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import plotly.graph_objects as go
 
 PATH = os.path.dirname(os.path.abspath(__file__))
-load_dotenv(PATH + "/../assets/mclare.env")
+load_dotenv(PATH + "/../mclare.env")
 ORG_FILE = os.getenv("ORG_FILE")
 
 

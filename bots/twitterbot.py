@@ -5,7 +5,8 @@ import twitter
 from dotenv import load_dotenv
 from PIL import Image, ImageDraw, ImageFont
 
-load_dotenv('../assets/mclare.env')
+PATH = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(PATH + '/../mclare.env')
 
 # Set font
 try:
