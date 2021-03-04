@@ -1,0 +1,24 @@
+import signal
+import RPi.GPIO as GPIO
+import os
+from tinky-care import run_tinky_care
+
+PATH = os.path.dirname(os.path.abspath(__file__))
+BUTTONS = [5, 6, 16, 24]
+
+LABELS = ['A', 'B', 'C', 'D']
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+def handle_button(pin):
+    label = LABELS[BUTTONS.index(pin)]
+    if label == 'A':
+        os.remove(PATH + '/assets/update/status.json')
+        run_tinky_care()
+
+for pin in BUTTONS:
+    GPIO.add_event_detect(pin, GPIO.FALLING, handle_button, bouncetime=250)
+
+signal.pause()
