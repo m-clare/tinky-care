@@ -9,7 +9,7 @@ from datetime import datetime
 PATH = os.path.dirname(os.path.abspath(__file__))
 
 try:
-    ttf = ImageFont.truetype(os.getenv("DANK_MONO_ITALIC"), size=24)
+    ttf = ImageFont.truetype(os.getenv("DANK_MONO_ITALIC"), size=36)
 except ValueError:
     print("Default font not found in assets!")
 
@@ -81,3 +81,9 @@ def get_text_image(break_text):
         draw.text((x, y), msg, (0, 0, 0), ttf)
         height_counter += h
     return img
+
+def get_pomodoro(image_num, status):
+    if status == 'still working':
+        return get_tomato_image(image_num)
+    else:
+        return get_text_image(status)
