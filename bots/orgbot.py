@@ -13,10 +13,12 @@ def create_org_bar_chart(days, task_count):
     fig = go.Figure(go.Bar(x=task_count, y=days, orientation='h',
                            text=task_count, textposition='auto',
                            textangle=0,
-                           marker=dict(color=task_count, colorscale='bluered')
+                           textfont=dict(color='black'),
+                           marker=dict(color=task_count, colorscale='sunset')
                            ))
     fig['layout'].update(width=224, height=448, plot_bgcolor='#fff',
                          font=dict(family="Dank Mono, Consolas, monospace",
+                                   color='black',
                                    size=28),
                          xaxis=dict(showgrid=False,
                                     showline=False,
