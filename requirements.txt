@@ -1,4 +1,7 @@
 python-twitter
 plotly
-re
-font-caladea
+emoji
+python-dotenv
+font-fredoka-one
+inky
+Pillow

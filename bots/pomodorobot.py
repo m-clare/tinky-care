@@ -11,7 +11,7 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 try:
     ttf = ImageFont.truetype(os.getenv("DANK_MONO_ITALIC"), size=36)
 except ValueError:
-    print("Default font not found in assets!")
+    ttf = ImageFont.truetype(FredokaOne)
 
 
 def format_line(font, msg, width):

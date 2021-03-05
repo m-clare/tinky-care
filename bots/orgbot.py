@@ -32,7 +32,9 @@ def create_org_bar_chart(days, task_count):
                          margin=dict(l=10, r=30, t=10, b=10, pad=3),
                          bargap=0.5,
                          )
-    fig.update_traces(texttemplate='%{value}', cliponaxis=False, selector=dict(type='bar'))
+    fig.update_traces(texttemplate='%{value}', cliponaxis=False,
+                      textfont=dict(size=20), constraintext='outside',
+                      selector=dict(type='bar'))
     return fig
 
 
@@ -81,6 +83,4 @@ def get_org_image(toFile=True):
 
 
 if __name__ == "__main__":
-    subplots = get_org_image(False)
-    subplots.show()
-
+    subplots = get_org_image()

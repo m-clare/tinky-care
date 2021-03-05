@@ -13,6 +13,7 @@ GPIO.setmode(GPIO.BCM)
 
 GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+
 def handle_button(pin):
     label = LABELS[BUTTONS.index(pin)]
     if label == 'A':
@@ -22,7 +23,11 @@ def handle_button(pin):
         run_tinky_care()
     if label == 'D':
         clear_inky()
+    if label == 'C':
+        # cancel pomodoro mode
+        run_tinky_care(False)
     return
+
 
 for pin in BUTTONS:
     GPIO.add_event_detect(pin, GPIO.FALLING, handle_button, bouncetime=250)

@@ -50,14 +50,16 @@ def rgb_to_inky(canvas):
     inky_display.show()
 
 
-def make_canvas(num_tomato, status_text, PATH):
-    canvas = Image.new("RGB", (inky_display.WIDTH, inky_display.HEIGHT), (255, 255, 255))
+def make_canvas(PATH, num_tomato=None, status_text=None):
+    canvas = Image.new("RGB", (inky_display.WIDTH, inky_display.HEIGHT),
+                       (255, 255, 255))
     org = Image.open(PATH + '/assets/update/org.png')
     tweet = get_tweet_image(376, 356, toFile=False)
-    pom = get_pomodoro(num_tomato, status_text)
     canvas.paste(org, (0, 0))
     canvas.paste(tweet, (org.width, 0))
-    canvas.paste(pom, (org.width, tweet.height))
+    if num_tomato:
+        pom = get_pomodoro(num_tomato, status_text)
+        canvas.paste(pom, (org.width, tweet.height))
     return canvas
 
 
@@ -67,28 +69,32 @@ def check_display(tomato, cycle, start_time, PATH):
         return
     else:
         # Assemble new image for update
-        canvas = make_canvas(tomato, cycle, PATH)
+        canvas = make_canvas(PATH, tomato, cycle)
         rgb_to_inky(canvas)
         save_status(num_tomato, status_text, start_time, PATH)
 
 
-def run_tinky_care():
+def run_tinky_care(pomodoro_mode=True):
     # default start values for pomodoro
     tomato = 0
     cycle = 'still working'
     start_time = int(dt.utcnow().timestamp()) % 86400
     PATH = os.path.dirname(os.path.abspath(__file__))
-    if os.path.exists(PATH + '/assets/update/status.json'):
-        with open(PATH + '/assets/update/status.json', 'r') as fh:
-            status = json.load(fh)
-            tomato = status["num_tomato"]
-            cycle = status["status_cycle"]
-            start_time = status['start_time']
-        check_display(tomato, cycle, start_time, PATH)
+    if pomodoro_mode:
+        if os.path.exists(PATH + '/assets/update/status.json'):
+            with open(PATH + '/assets/update/status.json', 'r') as fh:
+                status = json.load(fh)
+                tomato = status["num_tomato"]
+                cycle = status["status_cycle"]
+                start_time = status['start_time']
+            check_display(tomato, cycle, start_time, PATH)
+        else:
+            canvas = make_canvas(PATH, tomato, cycle)
+            rgb_to_inky(canvas)
+            save_status(tomato, cycle, start_time, PATH)
     else:
-        canvas = make_canvas(tomato, cycle, PATH)
+        canvas = make_canvas(PATH)
         rgb_to_inky(canvas)
-        save_status(tomato, cycle, start_time, PATH)
 
 
 if __name__ == "__main__":
