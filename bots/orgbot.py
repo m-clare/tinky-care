@@ -11,11 +11,12 @@ ORG_FILE = os.getenv("ORG_FILE")
 
 def create_org_bar_chart(days, task_count):
     fig = go.Figure(go.Bar(x=task_count, y=days, orientation='h',
-                           text=task_count, textposition='auto',
+                           text=task_count, textposition='outside',
                            textangle=0,
                            textfont=dict(color='black'),
                            marker=dict(color=task_count, colorscale='sunset')
                            ))
+
     fig['layout'].update(width=224, height=448, plot_bgcolor='#fff',
                          font=dict(family="Dank Mono, Consolas, monospace",
                                    color='black',
@@ -28,10 +29,10 @@ def create_org_bar_chart(days, task_count):
                                     showline=False,
                                     showticklabels=True,
                                     zeroline=False),
-                         margin=dict(l=10, r=10, t=10, b=10, pad=3),
-
+                         margin=dict(l=10, r=30, t=10, b=10, pad=3),
                          bargap=0.5,
                          )
+    fig.update_traces(texttemplate='%{value}', cliponaxis=False, selector=dict(type='bar'))
     return fig
 
 
@@ -80,5 +81,6 @@ def get_org_image(toFile=True):
 
 
 if __name__ == "__main__":
-    subplots = get_org_image()
+    subplots = get_org_image(False)
+    subplots.show()
 
