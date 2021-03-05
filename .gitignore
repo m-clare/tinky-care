@@ -1,3 +1,5 @@
 mclare.env
 *.otf
 *.pyc
+bots/__pycache__
+assets/update

@@ -54,12 +54,14 @@ def make_canvas(PATH, num_tomato=None, status_text=None):
     canvas = Image.new("RGB", (inky_display.WIDTH, inky_display.HEIGHT),
                        (255, 255, 255))
     org = Image.open(PATH + '/assets/update/org.png')
-    tweet = get_tweet_image(376, 356, toFile=False)
     canvas.paste(org, (0, 0))
-    canvas.paste(tweet, (org.width, 0))
     if num_tomato:
         pom = get_pomodoro(num_tomato, status_text)
         canvas.paste(pom, (org.width, tweet.height))
+        tweet = get_tweet_image(376, 356, toFile=False)
+    else:
+        tweet = get_tweet_image(376, 448, toFile=False)
+    canvas.paste(tweet, (org.width, 0))
     return canvas
 
 
