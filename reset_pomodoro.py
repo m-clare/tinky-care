@@ -17,9 +17,10 @@ GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 def handle_button(pin):
     label = LABELS[BUTTONS.index(pin)]
     if label == 'A':
-        # reset status if it exists
-        if os.path.exists(PATH + '/assets/update/status.json'):
-            os.remove(PATH + '/assets/update/status.json')
+        # reset status if it exist
+        s
+        if os.path.exists(PATH + '/assets/status.json'):
+            os.remove(PATH + '/assets/status.json')
         run_tinky_care()
     if label == 'D':
         clear_inky()

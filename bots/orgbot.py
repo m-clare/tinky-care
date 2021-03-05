@@ -74,7 +74,7 @@ def get_org_image(toFile=True):
     task_count.reverse()
     subplots = create_org_bar_chart(days, task_count)
     if toFile:
-        subplots.write_image(PATH + '/../assets/update/org.png',
+        subplots.write_image(PATH + '/../assets/org.png',
                              format="png",
                              width=224,
                              height=448)

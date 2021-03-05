@@ -2,4 +2,6 @@ mclare.env
 *.otf
 *.pyc
 bots/__pycache__
-assets/update
+assets/org.png
+assets/tweet.png
+assets/status.json

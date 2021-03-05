@@ -37,7 +37,7 @@ def save_status(num_tomato, status_text, start_time, PATH):
     out_dict = {'num_tomato': num_tomato,
                 'status_cycle': status_text,
                 'start_time': start_time}
-    with open(PATH + '/assets/update/status.json', 'w') as fh:
+    with open(PATH + '/assets/status.json', 'w') as fh:
         json.dump(out_dict, fh)
 
 
@@ -53,7 +53,7 @@ def rgb_to_inky(canvas):
 def make_canvas(PATH, num_tomato=None, status_text=None):
     canvas = Image.new("RGB", (inky_display.WIDTH, inky_display.HEIGHT),
                        (255, 255, 255))
-    org = Image.open(PATH + '/assets/update/org.png')
+    org = Image.open(PATH + '/assets/org.png')
     canvas.paste(org, (0, 0))
     if num_tomato:
         pom = get_pomodoro(num_tomato, status_text)
@@ -83,8 +83,8 @@ def run_tinky_care(pomodoro_mode=True):
     start_time = int(dt.utcnow().timestamp()) % 86400
     PATH = os.path.dirname(os.path.abspath(__file__))
     if pomodoro_mode:
-        if os.path.exists(PATH + '/assets/update/status.json'):
-            with open(PATH + '/assets/update/status.json', 'r') as fh:
+        if os.path.exists(PATH + '/assets/status.json'):
+            with open(PATH + '/assets/status.json', 'r') as fh:
                 status = json.load(fh)
                 tomato = status["num_tomato"]
                 cycle = status["status_cycle"]

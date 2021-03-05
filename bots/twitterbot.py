@@ -57,7 +57,7 @@ def get_tweet_image(width, height, toFile=True):
         draw.text((x, y), msg, (0, 0, 0), font)
         height_counter += h
     if toFile:
-        img.save(PATH + '/../assets/update/tweet.png', format='png')
+        img.save(PATH + '/../assets/tweet.png', format='png')
     else:
         return img
 
