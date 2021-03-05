@@ -1,0 +1,15 @@
+import time
+
+from inky.inky_uc8159 import Inky, CLEAN
+
+
+def clear_inky():
+    inky = Inky()
+
+    for _ in range(2):
+        for y in range(inky.height - 1):
+            for x in range(inky.width - 1):
+                inky.set_pixel(x, y, CLEAN)
+
+        inky.show()
+        time.sleep(1.0)

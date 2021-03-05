@@ -33,26 +33,12 @@ MID_PALETTE = tuple(sum(x) // 2 for x in zip(DESATURATED_PALETTE,
                                              SATURATED_PALETTE))
 
 
-def load_status():
-    with open(PATH + '/assets/update/status.json', 'r') as fh:
-        status = json.load(fh)
-        tomato = status["num_tomato"]
-        cycle = status["status_cycle"]
-        start_time = status['start_time']
-    return tomato, cycle, start_time
-
-
-def save_status(num_tomato, status_text, start_time):
+def save_status(num_tomato, status_text, start_time, PATH):
     out_dict = {'num_tomato': num_tomato,
                 'status_cycle': status_text,
                 'start_time': start_time}
     with open(PATH + '/assets/update/status.json', 'w') as fh:
         json.dump(out_dict, fh)
-
-
-def refresh_image(tomato, cycle):
-    canvas = make_canvas(tomato, cycle)
-    rgb_to_inky(canvas)
 
 
 def rgb_to_inky(canvas):
@@ -64,7 +50,7 @@ def rgb_to_inky(canvas):
     inky_display.show()
 
 
-def make_canvas(num_tomato, status_text):
+def make_canvas(num_tomato, status_text, PATH):
     canvas = Image.new("RGB", (inky_display.WIDTH, inky_display.HEIGHT), (255, 255, 255))
     org = Image.open(PATH + '/assets/update/org.png')
     tweet = get_tweet_image(376, 356, toFile=False)
@@ -75,28 +61,34 @@ def make_canvas(num_tomato, status_text):
     return canvas
 
 
-def check_display(tomato, cycle, start_time):
+def check_display(tomato, cycle, start_time, PATH):
     num_tomato, status_text = get_pomodoro_time(start_time)
     if num_tomato == tomato and status_text == cycle:
         return
     else:
         # Assemble new image for update
-        refresh_image(num_tomato, status_text)
-        save_status(num_tomato, status_text, start_time)
+        canvas = make_canvas(tomato, cycle, PATH)
+        rgb_to_inky(canvas)
+        save_status(num_tomato, status_text, start_time, PATH)
 
 
 def run_tinky_care():
-    PATH = os.path.dirname(os.path.abspath(__file__))
     # default start values for pomodoro
     tomato = 0
     cycle = 'still working'
     start_time = int(dt.utcnow().timestamp()) % 86400
-    try:
-        tomato, cycle, start_time = load_status()
-        check_display(tomato, cycle, start_time)
-    except:
-        refresh_image(tomato, cycle)
-        save_status(tomato, cycle, start_time)
+    PATH = os.path.dirname(os.path.abspath(__file__))
+    if os.path.exists(PATH + '/assets/update/status.json'):
+        with open(PATH + '/assets/update/status.json', 'r') as fh:
+            status = json.load(fh)
+            tomato = status["num_tomato"]
+            cycle = status["status_cycle"]
+            start_time = status['start_time']
+        check_display(tomato, cycle, start_time, PATH)
+    else:
+        canvas = make_canvas(tomato, cycle, PATH)
+        rgb_to_inky(canvas)
+        save_status(tomato, cycle, start_time, PATH)
 
 
 if __name__ == "__main__":
