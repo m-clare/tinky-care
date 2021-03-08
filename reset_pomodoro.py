@@ -3,6 +3,8 @@ import RPi.GPIO as GPIO
 import os
 from tinkycare import run_tinky_care
 from clear import clear_inky
+from pathlib import Path
+import contextlib
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 BUTTONS = [5, 6, 16, 24]
@@ -18,9 +20,9 @@ def handle_button(pin):
     label = LABELS[BUTTONS.index(pin)]
     if label == 'A':
         # reset status if it exist
-        s
-        if os.path.exists(PATH + '/assets/status.json'):
-            os.remove(PATH + '/assets/status.json')
+        status_file = Path(PATH + '/assets/status.json')
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(status_file)
         run_tinky_care()
     if label == 'D':
         clear_inky()
