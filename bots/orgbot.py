@@ -53,6 +53,7 @@ def read_org_file(org_file):
                 m = re.search(r"(\d{4}-\d{2}-\d{2})", line).group(1)
             if m:
                 found_date = datetime.date.fromisoformat(m)
+                print(m)
                 difference = (now - found_date).days
                 if difference < 7:
                     date_bins[difference] += 1

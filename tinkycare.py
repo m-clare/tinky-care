@@ -66,10 +66,9 @@ def make_canvas(PATH, num_tomato=None, status_text=None):
     return canvas
 
 
-def check_display(tomato, cycle, start_time, PATH):
+def check_display(tomato, cycle, start_time, reset, PATH):
     num_tomato, status_text = get_pomodoro_time(start_time)
-    if num_tomato == tomato and status_text == cycle:
-
+    if num_tomato == tomato and status_text == cycle and reset is False:
         return
     else:
         # Assemble new image for update
@@ -93,7 +92,7 @@ def run_tinky_care(pomodoro_mode=True):
                     tomato = status["num_tomato"]
                     cycle = status["status_cycle"]
                     start_time = status['start_time']
-            check_display(tomato, cycle, start_time, PATH)
+            check_display(tomato, cycle, start_time, reset, PATH)
         else:
             canvas = make_canvas(PATH, tomato, cycle)
             rgb_to_inky(canvas)

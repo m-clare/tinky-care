@@ -46,13 +46,10 @@ def get_pomodoro_time(start_time):
     num_tomato = int(pt_in_cycle // (pomodoro + small_break))
     if int(pt_in_cycle % (pomodoro + small_break) >= pomodoro) and \
        (num_tomato < 3):
-        print(num_tomato, "break time!")
         return (num_tomato, "break time!")
     elif (pt_in_cycle > (4 * pomodoro + 3 * small_break)):
-        print(num_tomato, "long break time")
         return (num_tomato, "looooong break time!")
     else:
-        print(num_tomato, "still working")
         return (num_tomato, "still working")
 
 
