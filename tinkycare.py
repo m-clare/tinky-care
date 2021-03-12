@@ -36,7 +36,8 @@ MID_PALETTE = tuple(sum(x) // 2 for x in zip(DESATURATED_PALETTE,
 def save_status(num_tomato, status_text, start_time, PATH):
     out_dict = {'num_tomato': num_tomato,
                 'status_cycle': status_text,
-                'start_time': start_time}
+                'start_time': start_time,
+                'reset': False}
     with open(PATH + '/assets/status.json', 'w') as fh:
         json.dump(out_dict, fh)
 
@@ -87,9 +88,11 @@ def run_tinky_care(pomodoro_mode=True):
         if os.path.exists(PATH + '/assets/status.json'):
             with open(PATH + '/assets/status.json', 'r') as fh:
                 status = json.load(fh)
-                tomato = status["num_tomato"]
-                cycle = status["status_cycle"]
-                start_time = status['start_time']
+                reset = status["reset"]
+                if reset is False:
+                    tomato = status["num_tomato"]
+                    cycle = status["status_cycle"]
+                    start_time = status['start_time']
             check_display(tomato, cycle, start_time, PATH)
         else:
             canvas = make_canvas(PATH, tomato, cycle)

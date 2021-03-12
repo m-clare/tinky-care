@@ -21,8 +21,11 @@ def handle_button(pin):
     if label == 'A':
         # reset status if it exist
         status_file = Path(PATH + '/assets/status.json')
-        with contextlib.suppress(FileNotFoundError):
-            os.unlink(status_file)
+        with open(status_file, 'r') as file:
+            data = json.load(file)
+            data['reset'] = True
+        with open(status_file, 'w') as file:
+            json.dump(data, file)
         run_tinky_care()
     if label == 'D':
         clear_inky()
