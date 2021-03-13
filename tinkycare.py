@@ -56,10 +56,10 @@ def make_canvas(PATH, num_tomato=None, status_text=None):
                        (255, 255, 255))
     org = Image.open(PATH + '/assets/org.png')
     canvas.paste(org, (0, 0))
-    if num_tomato is not None:
+    if num_tomato:
         pom = get_pomodoro(num_tomato, status_text)
-        tweet = get_tweet_image(376, 356, toFile=False)
         canvas.paste(pom, (org.width, tweet.height))
+        tweet = get_tweet_image(376, 356, toFile=False)
     else:
         tweet = get_tweet_image(376, 448, toFile=False)
     canvas.paste(tweet, (org.width, 0))
@@ -69,7 +69,6 @@ def make_canvas(PATH, num_tomato=None, status_text=None):
 def check_display(tomato, cycle, start_time, PATH):
     num_tomato, status_text = get_pomodoro_time(start_time)
     if num_tomato == tomato and status_text == cycle:
-
         return
     else:
         # Assemble new image for update
