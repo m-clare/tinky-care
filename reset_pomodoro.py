@@ -3,6 +3,9 @@ import RPi.GPIO as GPIO
 import os
 from tinkycare import run_tinky_care
 from clear import clear_inky
+from pathlib import Path
+import contextlib
+import json
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 BUTTONS = [5, 6, 16, 24]
