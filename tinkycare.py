@@ -4,7 +4,8 @@ from PIL import Image, ImageDraw, ImageFont
 from inky.inky_uc8159 import Inky
 from datetime import datetime as dt
 from bots.orgbot import get_org_image
-from bots.twitterbot import get_tweet_image
+from bots.twitterbot import get_tweet_img
+from bots.twitterbot import get_recent_care_tweet
 from bots.pomodorobot import get_pomodoro_time
 from bots.pomodorobot import get_pomodoro
 
@@ -33,13 +34,9 @@ MID_PALETTE = tuple(sum(x) // 2 for x in zip(DESATURATED_PALETTE,
                                              SATURATED_PALETTE))
 
 
-def save_status(num_tomato, status_text, start_time, PATH):
-    out_dict = {'num_tomato': num_tomato,
-                'status_cycle': status_text,
-                'start_time': start_time,
-                'reset': False}
+def save_status(data, PATH):
     with open(PATH + '/assets/status.json', 'w') as fh:
-        json.dump(out_dict, fh)
+        json.dump(data, fh)
 
 
 def rgb_to_inky(canvas):
@@ -51,61 +48,62 @@ def rgb_to_inky(canvas):
     inky_display.show()
 
 
-def make_canvas(PATH, num_tomato=None, status_text=None):
+def make_canvas(data, tweet_only, PATH):
     canvas = Image.new("RGB", (inky_display.WIDTH, inky_display.HEIGHT),
                        (255, 255, 255))
     org = Image.open(PATH + '/assets/org.png')
     canvas.paste(org, (0, 0))
-    if num_tomato:
-        pom = get_pomodoro(num_tomato, status_text)
-        canvas.paste(pom, (org.width, tweet.height))
-        tweet = get_tweet_image(376, 356, toFile=False)
+    if tweet_only is True:
+        tweet = get_tweet_img(376, 448, toFile=False)
     else:
-        tweet = get_tweet_image(376, 448, toFile=False)
+        pom = get_pomodoro(data['tomato'], data['cycle'])
+        tweet = get_tweet_img(376, 356, toFile=False)
+        canvas.paste(pom, (org.width, tweet.height))
     canvas.paste(tweet, (org.width, 0))
     return canvas
 
 
-def check_display(tomato, cycle, start_time, PATH):
-    num_tomato, status_text = get_pomodoro_time(start_time)
-    if num_tomato == tomato and status_text == cycle:
-        return
-    else:
-        # Assemble new image for update
-        canvas = make_canvas(PATH, tomato, cycle)
-        rgb_to_inky(canvas)
-        save_status(num_tomato, status_text, start_time, PATH)
-
-
-def run_tinky_care(pomodoro_mode=True):
-    # default start values for pomodoro
-    tomato = 0
-    cycle = 'still working'
-    start_time = int(dt.utcnow().timestamp()) % 86400
-    PATH = os.path.dirname(os.path.abspath(__file__))
-    if pomodoro_mode:
-        if os.path.exists(PATH + '/assets/status.json'):
-            with open(PATH + '/assets/status.json', 'r') as fh:
-                status = json.load(fh)
-                reset = status["reset"]
-                if reset is False:
-                    tomato = status["num_tomato"]
-                    cycle = status["status_cycle"]
-                    start_time = status['start_time']
-            check_display(tomato, cycle, start_time, PATH)
-        else:
-            canvas = make_canvas(PATH, tomato, cycle)
+def check_display(data, PATH):
+    num_tomato, status_text = get_pomodoro_time(data['start_time'])
+    tweet = get_recent_care_tweet()
+    pomodoro = data['pomodoro_mode']
+    reset = data['reset']
+    if pomodoro is False:
+        # check if twitter has changed, otherwise don't update
+        if tweet != data['tweet']:
+            data['tweet'] = tweet
+            canvas = make_canvas(data, True, PATH)
             rgb_to_inky(canvas)
-            save_status(tomato, cycle, start_time, PATH)
-    else:
-        canvas = make_canvas(PATH)
+            save_status(data, PATH)
+        else:
+            return
+    elif reset is True or (num_tomato != data['tomato']
+                           and status_text != data['cycle']):
+        data['tomato'] = num_tomato
+        data['cycle'] = status_text
+        data['reset'] = False
+        canvas = make_canvas(data, False, PATH)
         rgb_to_inky(canvas)
+        save_status(data, PATH)
+    else:
+        return
+
+
+def run_tinky_care():
+    now = int(dt.utcnow().timestamp()) % 86400
+    # default start values for pomodoro
+    default_data = {'tomato': 0, 'cycle': 'still working',
+                    'start_time': now, 'pomodoro_mode': True,
+                    'reset': True,
+                    'tweet': ''}
+    PATH = os.path.dirname(os.path.abspath(__file__))
+    if os.path.exists(PATH + '/assets/status.json'):
+        with open(PATH + '/assets/status.json', 'r') as fh:
+            data = json.load(fh)
+            check_display(data, PATH)
+    else:
+        check_display(default_data, PATH)
 
 
 if __name__ == "__main__":
     run_tinky_care()
-
-
-
-
-

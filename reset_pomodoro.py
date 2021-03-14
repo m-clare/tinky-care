@@ -19,16 +19,25 @@ GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def handle_button(pin):
     label = LABELS[BUTTONS.index(pin)]
+    status_file = Path(PATH + '/assets/status.json')
     if label == 'A':
-        # reset status if it exists
-        if os.path.exists(PATH + '/assets/status.json'):
-            os.remove(PATH + '/assets/status.json')
+        with open(status_file, 'r') as file:
+            data = json.load(file)
+            data['reset'] = True
+            data['pomodoro_mode'] = True
+        with open(status_file, 'w') as file:
+            json.dump(data, file)
         run_tinky_care()
     if label == 'D':
         clear_inky()
     if label == 'C':
         # cancel pomodoro mode
-        run_tinky_care(False)
+        with open(status_file, 'r') as file:
+            data = json.load(file)
+            data['pomodoro_mode'] = False
+        with open(status_file, 'w') as file:
+            json.dump(data, file)
+        run_tinky_care()
     return
 
 
