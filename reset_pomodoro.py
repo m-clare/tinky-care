@@ -34,6 +34,7 @@ def handle_button(pin):
         # cancel pomodoro mode
         with open(status_file, 'r') as file:
             data = json.load(file)
+            data['reset'] = True
             data['pomodoro_mode'] = False
         with open(status_file, 'w') as file:
             json.dump(data, file)
