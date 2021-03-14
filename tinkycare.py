@@ -48,23 +48,23 @@ def rgb_to_inky(canvas):
     inky_display.show()
 
 
-def make_canvas(data, tweet_only=False, PATH):
+def make_canvas(data, tweet_only, PATH):
     canvas = Image.new("RGB", (inky_display.WIDTH, inky_display.HEIGHT),
                        (255, 255, 255))
     org = Image.open(PATH + '/assets/org.png')
     canvas.paste(org, (0, 0))
     if tweet_only is True:
-        tweet, text = get_tweet(376, 448, toFile=False)
+        tweet = get_tweet_img(376, 448, toFile=False)
     else:
-        pom = get_pomodoro(num_tomato, status_text)
-        tweet, text = get_tweet(376, 356, toFile=False)
+        pom = get_pomodoro(data['tomato'], data['cycle'])
+        tweet = get_tweet_img(376, 356, toFile=False)
         canvas.paste(pom, (org.width, tweet.height))
     canvas.paste(tweet, (org.width, 0))
     return canvas
 
 
 def check_display(data, PATH):
-    num_tomato, status_text = get_pomodoro_time(start_time)
+    num_tomato, status_text = get_pomodoro_time(data['start_time'])
     tweet = get_recent_care_tweet()
     pomodoro = data['pomodoro_mode']
     reset = data['reset']
@@ -93,7 +93,7 @@ def run_tinky_care():
     now = int(dt.utcnow().timestamp()) % 86400
     # default start values for pomodoro
     default_data = {'tomato': 0, 'cycle': 'still working',
-                    'start_time': now, pomodoro_mode: True,
+                    'start_time': now, 'pomodoro_mode': True,
                     'reset': True,
                     'tweet': ''}
     PATH = os.path.dirname(os.path.abspath(__file__))
@@ -101,8 +101,8 @@ def run_tinky_care():
         with open(PATH + '/assets/status.json', 'r') as fh:
             data = json.load(fh)
             check_display(data, PATH)
-        else:
-            check_display(default_data, PATH)
+    else:
+        check_display(default_data, PATH)
 
 
 if __name__ == "__main__":
