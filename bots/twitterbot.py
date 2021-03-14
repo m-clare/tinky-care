@@ -39,7 +39,7 @@ def format_line(font, msg, width):
     return lines
 
 
-def get_tweet_image(width, height, toFile=True):
+def get_tweet_img(width, height, toFile=True):
     font = ttf
     text = get_recent_care_tweet()
     padding = 2*10
@@ -58,8 +58,7 @@ def get_tweet_image(width, height, toFile=True):
         height_counter += h
     if toFile:
         img.save(PATH + '/../assets/tweet.png', format='png')
-    else:
-        return img
+    return img
 
 
 def get_recent_care_tweet():

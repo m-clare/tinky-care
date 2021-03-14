@@ -5,6 +5,7 @@ from tinkycare import run_tinky_care
 from clear import clear_inky
 from pathlib import Path
 import contextlib
+import json
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 BUTTONS = [5, 6, 16, 24]
@@ -18,12 +19,12 @@ GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def handle_button(pin):
     label = LABELS[BUTTONS.index(pin)]
+    status_file = Path(PATH + '/assets/status.json')
     if label == 'A':
-        # reset status if it exist
-        status_file = Path(PATH + '/assets/status.json')
         with open(status_file, 'r') as file:
             data = json.load(file)
             data['reset'] = True
+            data['pomodoro_mode'] = True
         with open(status_file, 'w') as file:
             json.dump(data, file)
         run_tinky_care()
@@ -31,7 +32,12 @@ def handle_button(pin):
         clear_inky()
     if label == 'C':
         # cancel pomodoro mode
-        run_tinky_care(False)
+        with open(status_file, 'r') as file:
+            data = json.load(file)
+            data['pomodoro_mode'] = False
+        with open(status_file, 'w') as file:
+            json.dump(data, file)
+        run_tinky_care()
     return
 
 
