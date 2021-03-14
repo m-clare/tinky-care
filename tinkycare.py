@@ -70,8 +70,9 @@ def check_display(data, PATH):
     reset = data['reset']
     if pomodoro is False:
         # check if twitter has changed, otherwise don't update
-        if tweet != data['tweet']:
+        if tweet != data['tweet'] or reset is True:
             data['tweet'] = tweet
+            data['reset'] = False
             canvas = make_canvas(data, True, PATH)
             rgb_to_inky(canvas)
             save_status(data, PATH)
