@@ -6,6 +6,7 @@ from clear import clear_inky
 from pathlib import Path
 import contextlib
 import json
+import datetime as dt
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 BUTTONS = [5, 6, 16, 24]
@@ -25,6 +26,7 @@ def handle_button(pin):
             data = json.load(file)
             data['reset'] = True
             data['pomodoro_mode'] = True
+            data['start_time'] = int(dt.utcnow().timestamp()) 
         with open(status_file, 'w') as file:
             json.dump(data, file)
         run_tinky_care()
