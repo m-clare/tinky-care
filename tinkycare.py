@@ -66,6 +66,8 @@ def make_canvas(data, tweet_only, PATH):
 def check_display(data, PATH):
     num_tomato, status_text = get_pomodoro_time(data['start_time'])
     tweet = get_recent_care_tweet()
+    print(tweet)
+    print(num_tomato, status_text)
     pomodoro = data['pomodoro_mode']
     reset = data['reset']
     if pomodoro is False:
@@ -78,7 +80,9 @@ def check_display(data, PATH):
             save_status(data, PATH)
         else:
             return
-    elif reset is True or (status_text != data['cycle']):
+    elif reset is True or (status_text != data['cycle']) \
+                       or (num_tomato != data['tomato']) \
+                       or (tweet != data['tweet']):
         data['tomato'] = num_tomato
         data['cycle'] = status_text
         data['tweet'] = tweet
@@ -101,6 +105,7 @@ def run_tinky_care():
     if os.path.exists(PATH + '/assets/status.json'):
         with open(PATH + '/assets/status.json', 'r') as fh:
             data = json.load(fh)
+            print(data)
             check_display(data, PATH)
     else:
         check_display(default_data, PATH)
