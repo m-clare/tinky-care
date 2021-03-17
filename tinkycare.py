@@ -78,10 +78,10 @@ def check_display(data, PATH):
             save_status(data, PATH)
         else:
             return
-    elif reset is True or (num_tomato != data['tomato']
-                           and status_text != data['cycle']):
+    elif reset is True or (status_text != data['cycle']):
         data['tomato'] = num_tomato
         data['cycle'] = status_text
+        data['tweet'] = tweet
         data['reset'] = False
         canvas = make_canvas(data, False, PATH)
         rgb_to_inky(canvas)
