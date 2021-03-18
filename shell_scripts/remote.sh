@@ -1,1 +1,1 @@
-python3 ${HOME}/projects/tinky-care/tinky-care.py
+python3 ${HOME}/projects/tinky-care/tinkycare.py
