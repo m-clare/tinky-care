@@ -4,6 +4,7 @@ import emoji
 import twitter
 from dotenv import load_dotenv
 from PIL import Image, ImageDraw, ImageFont
+from font_fredoka_one import FredokaOne
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(PATH + '/../mclare.env')
@@ -12,7 +13,7 @@ load_dotenv(PATH + '/../mclare.env')
 try:
     ttf = ImageFont.truetype(os.getenv("DANK_MONO_ITALIC"), size=36)
 except ValueError:
-    print("Default font not found in assets!")
+    ttf = ImageFont.truetype(FredokaOne, size=36)
 
 
 def strip_emoji(text):

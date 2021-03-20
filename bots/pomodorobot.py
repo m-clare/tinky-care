@@ -79,6 +79,7 @@ def get_text_image(break_text):
         height_counter += h
     return img
 
+
 def get_pomodoro(image_num, status):
     if status == 'still working':
         return get_tomato_image(image_num)
