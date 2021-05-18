@@ -45,10 +45,14 @@ def get_next_event():
 
 def get_event_img(width, height, event, toFile=True):
     font = ttf
+    print(event)
     if event['active'] is True:
         event_name = event['name'][:28]
         event_range = event['start'] + ' - ' + event['end']
-        event_location = event['location'].split('/')[-1]
+        if event['location'] is None:
+            event_location = ''
+        else:
+            event_location = event['location'].split('/')[-1]
         full_text = (event_name, event_range, event_location)
     else:
         full_text = (event['name'][:28])
@@ -69,9 +73,7 @@ def get_event_img(width, height, event, toFile=True):
         height_counter += h
     if toFile:
         img.save(PATH + '/../assets/event.png', format='png')
-        return img
-    else:
-        return
+    return img
 
 
 def format_line(font, msg, width):

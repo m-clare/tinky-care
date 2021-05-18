@@ -176,6 +176,7 @@ def run_tinky_care():
             data = json.load(fh)
             check_display(data, PATH)
     else:
+        save_status(default_data, PATH)
         check_display(default_data, PATH)
 
 
