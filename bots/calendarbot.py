@@ -13,16 +13,17 @@ token = os.getenv("ICS_TOKEN")
 
 # Set font
 try:
-    ttf = ImageFont.truetype(os.getenv("DANK_MONO_ITALIC"), size=32)
+    ttf = ImageFont.truetype(os.getenv("DANK_MONO_ITALIC"), size=24)
 except ValueError:
-    ttf = ImageFont.truetype(FredokaOne, size=32)
+    ttf = ImageFont.truetype(FredokaOne, size=24)
 
 def get_next_event():
     null_event = {'name': "No events scheduled.",
                   'location': None,
                   'start': None,
                   'end': None,
-                  'active': False}
+                  'active': False,
+                  'counter': 0}
     if not token:
         return null_event 
     c = Calendar(requests.get(calendar_base + token).text)
@@ -36,14 +37,14 @@ def get_next_event():
                 'start': event.begin.astimezone(tz=None).strftime('%H:%M'),
                 'end': event.end.astimezone(tz=None).strftime('%H:%M'),
                 'active': True,
+                'counter': 0
             }
             return next_event
     return null_event
 
 
-def get_event_img(width, height, toFile=True):
+def get_event_img(width, height, event, toFile=True):
     font = ttf
-    event = get_next_event()
     if event['active'] is True:
         event_name = event['name'][:28]
         event_range = event['start'] + ' - ' + event['end']
@@ -90,5 +91,6 @@ def format_line(font, msg, width):
     return lines
 
 if __name__ == "__main__":
-    img = get_event_img(376, 104)
+    event = get_next_event()
+    img = get_event_img(376, 104, event)
     img.show()

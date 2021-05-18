@@ -58,6 +58,7 @@ def read_org_file(org_file):
                     date_bins[difference] += 1
             else:
                 prev_line = line
+    print(date_bins)
     return date_bins
 
 
