@@ -99,7 +99,8 @@ def make_canvas(data, tweet_only, PATH):
         tweet = get_tweet_img(376, 252, toFile=False)
         event = get_event_img(376, 104, toFile=False)
         canvas.paste(pom, (org.width, tweet.height))
-    canvas.paste(tweet, (org.width, 0))
+    canvas.paste(tweet, (org.width, 104))
+    canvas.paste(event, (org.width, 0))
     return canvas
 
 
