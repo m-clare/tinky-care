@@ -93,21 +93,21 @@ def make_canvas(data, tweet_only, PATH):
     canvas.paste(org, (0, 0))
     if tweet_only is True:
         tweet = get_tweet_img(376, 344, toFile=False)
-        event = get_event_img(376, 104, toFile=False)
+        #event = get_event_img(376, 104, toFile=False)
     else:
         pom = get_pomodoro(data["tomato"], data["cycle"])
         tweet = get_tweet_img(376, 252, toFile=False)
-        event = get_event_img(376, 104, toFile=False)
-        canvas.paste(pom, (org.width, tweet.height))
+        #event = get_event_img(376, 104, toFile=False)
+        canvas.paste(pom, (org.width, tweet.height + event.height))
     canvas.paste(tweet, (org.width, 104))
-    canvas.paste(event, (org.width, 0))
+    #canvas.paste(event, (org.width, 0))
     return canvas
 
 
 def check_display(data, PATH):
     num_tomato, status_text = get_pomodoro_time(data["start_time"])
     tweet = get_recent_care_tweet()
-    event = get_next_event()
+    # event = get_next_event()
     pomodoro = data["pomodoro_mode"]
     reset = data["reset"]
     if pomodoro is False:
@@ -115,12 +115,12 @@ def check_display(data, PATH):
         if (
             tweet != data["tweet"]
             or reset is True
-            or event.active != data["event"]["active"]
-            or event.name != data["event"]["name"]
+            #or event["active"] != data["event"]["active"]
+            #or event["name"] != data["event"]["name"]
         ):
             data["tweet"] = tweet
             data["reset"] = False
-            data["event"] = event
+            #data["event"] = event
             canvas = make_canvas(data, True, PATH)
             rgb_to_inky(canvas)
             save_status(data, PATH)
@@ -131,14 +131,14 @@ def check_display(data, PATH):
         or (status_text != data["cycle"])
         or (num_tomato != data["tomato"])
         or (tweet != data["tweet"])
-        or (event.active != data["event"]["active"])
-        or (event.name != data["event"]["name"])
+        #or (event["active"] != data["event"]["active"])
+        #or (event["name"] != data["event"]["name"])
     ):
         data["tomato"] = num_tomato
         data["cycle"] = status_text
         data["tweet"] = tweet
         data["reset"] = False
-        data["event"] = event
+        #data["event"] = event
         canvas = make_canvas(data, False, PATH)
         rgb_to_inky(canvas)
         save_status(data, PATH)
@@ -157,7 +157,7 @@ def run_tinky_care():
         "reset": True,
         "tweet": "",
         "event": {
-            "name": None,
+            "name": 'No events scheduled.',
             "location": None,
             "start": None,
             "end": None,

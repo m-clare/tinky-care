@@ -49,26 +49,28 @@ def get_event_img(width, height, toFile=True):
         event_range = event['start'] + ' - ' + event['end']
         event_location = event['location'].split('/')[-1]
         full_text = (event_name, event_range, event_location)
-        lines = []
-        for line in full_text:
-            lines.extend(format_line(font, line, width))
-            _, line_height = font.getsize(lines[0])
-            centered_y = (height / 2) - ((line_height * len(lines)) / 2)
-            height_counter = centered_y
-            img = Image.new("RGB", (width, height), (255, 255, 255))
-            draw = ImageDraw.Draw(img)
-        for i in range(0, len(lines)):
-            msg = lines[i]
-            w, h = font.getsize(msg)
-            x = (width / 2) - (w / 2)
-            y = height_counter
-            draw.text((x, y), msg, (0, 0, 0), font)
-            height_counter += h
-        if toFile:
-            img.save(PATH + '/../assets/event.png', format='png')
+    else:
+        full_text = (event['name'][:28])
+    lines = []
+    for line in full_text:
+        lines.extend(format_line(font, line, width))
+        _, line_height = font.getsize(lines[0])
+        centered_y = (height / 2) - ((line_height * len(lines)) / 2)
+        height_counter = centered_y
+        img = Image.new("RGB", (width, height), (255, 255, 255))
+        draw = ImageDraw.Draw(img)
+    for i in range(0, len(lines)):
+        msg = lines[i]
+        w, h = font.getsize(msg)
+        x = (width / 2) - (w / 2)
+        y = height_counter
+        draw.text((x, y), msg, (0, 0, 0), font)
+        height_counter += h
+    if toFile:
+        img.save(PATH + '/../assets/event.png', format='png')
         return img
     else:
-        return Image.new("RGB", (width, height), (255, 255, 255))
+        return
 
 
 def format_line(font, msg, width):
