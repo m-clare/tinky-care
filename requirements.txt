@@ -3,5 +3,8 @@ plotly
 emoji
 python-dotenv
 font-fredoka-one
-inky
+ics
+inky[auto,fonts,rpi]
 Pillow
+requests
+
