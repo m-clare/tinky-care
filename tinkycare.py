@@ -108,11 +108,10 @@ def check_display(data, PATH):
     num_tomato, status_text = get_pomodoro_time(data["start_time"])
     tweet = get_recent_care_tweet()
     # fetch calendar data only every 10 min
-    if data["event"]["counter"] % 10 == 0:
+    if data["event_counter"] % 10 == 0:
         event = get_next_event()
     else:
         event = data["event"]
-    event["counter"] = event["counter"] + 1
     pomodoro = data["pomodoro_mode"]
     reset = data["reset"]
     if pomodoro is False:
@@ -161,19 +160,20 @@ def run_tinky_care():
         "pomodoro_mode": True,
         "reset": True,
         "tweet": "",
+        "event_counter": 0,
         "event": {
             "name": 'No events scheduled.',
             "location": None,
             "start": None,
             "end": None,
             "active": False,
-            "counter": 0,
         },
     }
     PATH = os.path.dirname(os.path.abspath(__file__))
     if os.path.exists(PATH + "/assets/status.json"):
         with open(PATH + "/assets/status.json", "r") as fh:
             data = json.load(fh)
+            data["event_counter"] += 1
             check_display(data, PATH)
     else:
         check_display(default_data, PATH)

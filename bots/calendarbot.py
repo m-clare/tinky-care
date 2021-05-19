@@ -23,7 +23,7 @@ def get_next_event():
                   'start': None,
                   'end': None,
                   'active': False,
-                  'counter': 0}
+                  }
     if not token:
         return null_event 
     c = Calendar(requests.get(calendar_base + token).text)
@@ -37,7 +37,6 @@ def get_next_event():
                 'start': event.begin.astimezone(tz=None).strftime('%H:%M'),
                 'end': event.end.astimezone(tz=None).strftime('%H:%M'),
                 'active': True,
-                'counter': 0
             }
             return next_event
     return null_event
