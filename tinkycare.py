@@ -129,6 +129,7 @@ def check_display(data, PATH):
             rgb_to_inky(canvas)
             save_status(data, PATH)
         else:
+            save_status(data, PATH)
             return
     elif (
         reset is True
@@ -147,6 +148,7 @@ def check_display(data, PATH):
         rgb_to_inky(canvas)
         save_status(data, PATH)
     else:
+        save_status(data, PATH)
         return
 
 
