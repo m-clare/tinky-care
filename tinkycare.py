@@ -112,7 +112,7 @@ def check_display(data, PATH):
         event = get_next_event()
     else:
         event = data["event"]
-    event["counter"] += 1
+    event["counter"] = event["counter"] + 1
     pomodoro = data["pomodoro_mode"]
     reset = data["reset"]
     if pomodoro is False:
@@ -176,7 +176,6 @@ def run_tinky_care():
             data = json.load(fh)
             check_display(data, PATH)
     else:
-        save_status(default_data, PATH)
         check_display(default_data, PATH)
 
 

@@ -55,7 +55,7 @@ def get_event_img(width, height, event, toFile=True):
             event_location = event['location'].split('/')[-1]
         full_text = (event_name, event_range, event_location)
     else:
-        full_text = (event['name'][:28])
+        full_text = (event['name'][:28], "", "")
     lines = []
     for line in full_text:
         lines.extend(format_line(font, line, width))
