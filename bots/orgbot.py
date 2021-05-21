@@ -14,7 +14,7 @@ def create_org_bar_chart(days, task_count):
                            text=task_count, textposition='outside',
                            textangle=0,
                            textfont=dict(color='black'),
-                           marker=dict(color=task_count, colorscale='sunset')
+                           marker=dict(color=task_count, colorscale='rainbow')
                            ))
 
     fig['layout'].update(width=224, height=448, plot_bgcolor='#fff',
