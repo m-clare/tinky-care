@@ -70,23 +70,6 @@ SATURATED_PALETTE = (
 
 MID_PALETTE = tuple(sum(x) // 2 for x in zip(DESATURATED_PALETTE, SATURATED_PALETTE))
 
-DEFAULT_DATA = {
-    "tomato": 0,
-    "cycle": "still working",
-    "start_time": int(dt.utcnow().timestamp()) % 86400,
-    "pomodoro_mode": True,
-    "reset": False,
-    "tweet": "",
-    "event_counter": 0,
-    "event": {
-        "name": 'No events scheduled.',
-        "location": None,
-        "start": None,
-        "end": None,
-        "active": False,
-    },
-}
-
 
 def save_status(data, PATH):
     with open(PATH + "/assets/status.json", "w") as fh:
@@ -144,6 +127,8 @@ def check_display(data, PATH):
             data["event"] = event
             canvas = make_canvas(data, True, PATH)
             rgb_to_inky(canvas)
+            save_status(data, PATH)
+        else:
             return
     elif (
         reset is True
@@ -160,18 +145,40 @@ def check_display(data, PATH):
         data["event"] = event
         canvas = make_canvas(data, False, PATH)
         rgb_to_inky(canvas)
+        save_status(data, PATH)
+    else:
         return
 
 
-# initialize data
-data = DEFAULT_DATA
-
-
 def run_tinky_care():
-    while True:
-        data["event_counter"] += 1
-        check_display(data)
-        time.sleep(60)
+    now = int(dt.utcnow().timestamp()) % 86400
+    # default start values for pomodoro
+    default_data = {
+        "tomato": 0,
+        "cycle": "still working",
+        "start_time": now,
+        "pomodoro_mode": True,
+        "reset": True,
+        "tweet": "",
+        "event_counter": 0,
+        "event": {
+            "name": 'No events scheduled.',
+            "location": None,
+            "start": None,
+            "end": None,
+            "active": False,
+        },
+    }
+    PATH = os.path.dirname(os.path.abspath(__file__))
+    if os.path.exists(PATH + "/assets/status.json"):
+        with open(PATH + "/assets/status.json", "r") as fh:
+            data = json.load(fh)
+            data["event_counter"] += 1
+            check_display(data, PATH)
+    else:
+        check_display(default_data, PATH)
+
 
 if __name__ == "__main__":
     run_tinky_care()
+
